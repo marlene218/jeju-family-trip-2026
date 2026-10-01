@@ -304,6 +304,39 @@ function stayGuide(id){
 
 function naverSearchUrl(q){return 'https://map.naver.com/p/search/'+encodeURIComponent(q);}
 
+
+function criticalTime(day){
+ const m={
+  'Day 1':`🚗 <b>18:00 LOTTE取車</b>｜抵達後先完成入境、領行李與緯緯需求，不為取車時間趕路。`,
+  'Day 2':`🍊 <b>09:45 柑橘農場</b> → <b>約11:45離開</b>前往午餐。`,
+  'Day 3':`🐠 <b>14:30前往 Ocean Arena</b> → ⭐ <b>14:50表演</b> → 約16:30離開。`,
+  'Day 4':`🍵 <b>11:15前離開 O'Sulloc</b> → <b>13:30前離開午餐</b> → <b>14:30前到花鳥園</b> → ⭐ <b>15:00表演</b>。`,
+  'Day 5':`🐶 <b>09:30 Snoopy Garden</b> → <b>11:45～12:00準備離開</b>前往午餐。`,
+  'Day 6':`⭐ <b>08:15～08:20最晚離開 Grabel</b> → <b>09:00 LOTTE還車</b> → ✈️ <b>11:05 TW689起飛</b>。`
+ };
+ const k=Object.keys(m).find(k=>day.startsWith(k));
+ return k?`<div class="note critical-time"><b>⭐ 今日關鍵時間</b><br>${m[k]}</div>`:'';
+}
+
+
+function dayExtra(day){
+ if(day.startsWith('Day 5')){
+  return `<div class="note"><b>🥯 今日外帶任務</b><br>
+  <b>오드랑베이커리 함덕점｜Audrant Bakery 咸德店</b>：主要目標為大蒜麵包。<br>
+  <b>런던베이글뮤지엄 제주｜London Bagel Museum 濟州</b>：挑想吃的貝果外帶；若排隊太久就直接略過。<br>
+  ⭐ <b>原則：買到就走、不安排內用、不為排隊延誤 Snoopy Garden。</b></div>
+  <div class="note"><b>🌙 明早返程｜睡前準備</b><br>
+  🧳 <b>行李</b>｜大件行李先整理完成，只留隔天晨間用品。<br>
+  🛂 <b>證件</b>｜護照、登機資料集中放隨身包。<br>
+  🍼 <b>緯緯</b>｜早餐／奶、尿布、濕紙巾、替換衣物另外放。<br>
+  🥣 <b>早餐</b>｜確認明早吃 Grabel 早餐，或今晚先準備簡單早餐。<br>
+  ⛽ <b>租車</b>｜確認目前油量與明早「Grabel → 成和加油站 → LOTTE」路線。<br>
+  📱 <b>3C</b>｜手機、行動電源充電，確認 Naver Map 可使用。<br>
+  ⭐ <b>設定鬧鐘｜明早08:15～08:20最晚離開 Grabel。</b></div>`;
+ }
+ return '';
+}
+
 function actionGuide(day){
   if(day.startsWith('Day 1')){
     return `<div class="note"><b>🧭 行動指南｜機場 → LOTTE 取車</b><br>
@@ -313,23 +346,10 @@ function actionGuide(day){
     ④ 抵達後辦理取車、確認安全座椅／車況／油量，再前往晚餐。<br>
     🕐 接駁參考：約8～12分鐘一班｜車程約5～10分鐘；以現場班次為準。</div>`;
   }
-  if(day.startsWith('Day 4')){
-    return `<div class="note"><b>⏱️ Day 4 時間提醒</b><br>⭐ 11:15前離開 O'Sulloc → 13:30前離開午餐 → 14:30前抵達花鳥園 → 15:00看表演。</div>`;
-  }
-  if(day.startsWith('Day 6')){
-    return `<div class="note"><b>🧭 行動指南｜返程日</b><br>
-    🥣 <b>07:00～07:40</b>｜早餐：優先飯店早餐或前一晚準備好的簡單早餐，不特地繞路排隊。<br>
-    🧳 <b>07:40～08:00</b>｜最後整理行李＋退房。<br>
-    ⭐ <b>08:15～08:20 最晚離開 Grabel</b>。<br>
-    ⛽ 導航至 성화주유소｜成和加油站，依合約補足油量；保留收據並拍油量表／里程。<br>
-    🚙 加油後直接導航至 LOTTE Jeju Auto House，<b>09:00 預約還車</b>。<br>
-    🚌 還車後搭 LOTTE 接駁返回濟州國際機場。<br>
-    ✈️ 辦理報到／托運／出境 → <b>11:05 TW689 起飛</b>。</div>`;
-  }
   return '';
 }
 
-function render(){document.querySelector('#overview').innerHTML=days.map((d,i)=>`<div class="route"><h3>${d.d}｜${d.sub}</h3><div class="route-links">${d.ids.map(id=>`<button class="jump" onclick="jumpTo('${id}')">${skeletonLabels[id]||items[id].name}</button>`).join('<span>➜</span>')}</div></div>`).join('');const detailSkip=new Set(['golden','grabel','lotte']);document.querySelector('#days').innerHTML=days.map(d=>{const detailIds=d.ids.filter(id=>!detailSkip.has(id));return `<div class="dayhead"><h2>${d.d}</h2><small>${d.sub}</small></div>${actionGuide(d.d)}${detailIds.length?detailIds.map(card).join(''):`<div class="note">✈️ 今日以退房、還車與搭機為主；住宿與租車資料請直接查看「🏨 住宿交通」。</div>`}`;}).join('');document.querySelector('#foodlist').innerHTML=mealDays.map(row=>`<div class="food-day"><h3>📅 ${row[0]}</h3>${row.slice(1).map(m=>{let x=m[1]?items[m[1]]:null;return `<div class="meal"><div class="meal-tag">${m[0]}</div><div class="foodcard"><h4>${x?x.name:(row[0].includes('10/28')?'Golden Daisy 附近簡單早餐':'簡單早餐')}</h4><div><span class="status ${m[2].includes('確認')||m[2].includes('尚待')?'check':'ok'}">${m[2]}</span></div>${x?`<p class="mini"><b>時間：</b>${x.time}<br><b>寶寶：</b>${x.baby}<br><b>營業/注意：</b>${x.info}</p>${mapButtons(x)}`:'<p class="mini">不另排名店，優先準時還車。</p>'}</div></div>`}).join('')}</div>`).join('');document.querySelector('#staylist').innerHTML=[['golden',items.golden],['grabel',items.grabel]].map(([id,x])=>`<div class="hotel" id="stay-${id}"><h3>${x.name}</h3><p>${x.time}</p>${mapButtons(x)}<p><b>地址：</b>${x.addr}<br><b>重點：</b>${x.info}<br><b>停車：</b>${x.parking}${id==='lotte'&&x.fuel?`<br><b>加油：</b>${x.fuel}`:''}</p>${id==='lotte'?`<div class="mapbar"><a class="mapbtn" href="${naverSearchUrl('롯데렌터카 제주 오토하우스 제주특별자치도 제주시 용해로 92')}" target="_blank" rel="noopener">🧭 Naver Map｜取車導航</a><button class="copy" onclick="navigator.clipboard.writeText('제주특별자치도 제주시 용해로 92')">📋 複製取車地址</button></div>`:''}${stayGuide(id)}${id==='golden'||id==='grabel'?breakfastGuide(id):''}</div>`).join('')}
+function render(){document.querySelector('#overview').innerHTML=days.map((d,i)=>`<div class="route"><h3>${d.d}｜${d.sub}</h3><div class="route-links">${d.ids.map(id=>`<button class="jump" onclick="jumpTo('${id}')">${skeletonLabels[id]||items[id].name}</button>`).join('<span>➜</span>')}</div></div>`).join('');const detailSkip=new Set(['golden','grabel','lotte']);document.querySelector('#days').innerHTML=days.map(d=>{const detailIds=d.ids.filter(id=>!detailSkip.has(id));return `<div class="dayhead"><h2>${d.d}</h2><small>${d.sub}</small></div>${criticalTime(d.d)}${actionGuide(d.d)}${detailIds.length?detailIds.map(card).join(''):`<div class="note">✈️ 今日以退房、還車與搭機為主；住宿與租車資料請直接查看「🏨 住宿交通」。</div>`}${dayExtra(d.d)}`;}).join('');document.querySelector('#foodlist').innerHTML=mealDays.map(row=>`<div class="food-day"><h3>📅 ${row[0]}</h3>${row.slice(1).map(m=>{let x=m[1]?items[m[1]]:null;return `<div class="meal"><div class="meal-tag">${m[0]}</div><div class="foodcard"><h4>${x?x.name:(row[0].includes('10/28')?'Golden Daisy 附近簡單早餐':'簡單早餐')}</h4><div><span class="status ${m[2].includes('確認')||m[2].includes('尚待')?'check':'ok'}">${m[2]}</span></div>${x?`<p class="mini"><b>時間：</b>${x.time}<br><b>寶寶：</b>${x.baby}<br><b>營業/注意：</b>${x.info}</p>${mapButtons(x)}`:'<p class="mini">不另排名店，優先準時還車。</p>'}</div></div>`}).join('')}</div>`).join('');document.querySelector('#staylist').innerHTML=[['golden',items.golden],['grabel',items.grabel]].map(([id,x])=>`<div class="hotel" id="stay-${id}"><h3>${x.name}</h3><p>${x.time}</p>${mapButtons(x)}<p><b>地址：</b>${x.addr}<br><b>重點：</b>${x.info}<br><b>停車：</b>${x.parking}${id==='lotte'&&x.fuel?`<br><b>加油：</b>${x.fuel}`:''}</p>${id==='lotte'?`<div class="mapbar"><a class="mapbtn" href="${naverSearchUrl('롯데렌터카 제주 오토하우스 제주특별자치도 제주시 용해로 92')}" target="_blank" rel="noopener">🧭 Naver Map｜取車導航</a><button class="copy" onclick="navigator.clipboard.writeText('제주특별자치도 제주시 용해로 92')">📋 複製取車地址</button></div>`:''}${stayGuide(id)}${id==='golden'||id==='grabel'?breakfastGuide(id):''}</div>`).join('')}
 function jumpTo(id){
   if(id==='golden'||id==='grabel'||id==='lotte'){
     const stayPanel=document.getElementById('stay');
