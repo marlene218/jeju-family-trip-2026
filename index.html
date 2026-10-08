@@ -258,8 +258,8 @@ const RESERVATION_LINKS={blackpork:'https://naver.me/x7eQwD1T',jeongmin:'https:/
 function reservationHtml(id){const text=reservationLine(id);const link=RESERVATION_LINKS[id];return `${text}${link?`｜<a class="reserve-link" href="${link}" target="_blank" rel="noopener">NAVER 訂位 ↗</a>`:''}`;}
 const FOOD_DIRECT_ZH={"modle": "請給我一份蕨菜海螺義大利麵、一份炸豬排和一份蛋包飯。", "arrivalDinner": "請給我一份原味雪濃湯套餐和一份微辣雪濃湯套餐。", "sisters": "請給我一份蕨菜肉湯和一份牛頭肉湯飯。牛頭肉湯飯要和小朋友一起吃，請不要加辣醬。", "ogane": "請給我一份烤鮑魚 A 套餐和一份兒童鮑魚粥。", "seafoodpot": "請給我一份小份海鮮湯。", "gasi": "請給我一份雙人套餐。豬肉湯麵會和小朋友一起吃，請做成不辣，也不要加辣椒粉。", "blackpork": "請給我一份黑豬肉雙人綜合套餐、一份蒸蛋、一份田螺大醬湯、一杯濟州小麥艾爾啤酒和一杯漢拏峰橘子馬格利酒。請問有提供兒童餐嗎？", "jewon": "請給我一份原味蔘雞湯和一份鮑魚蔘雞湯。", "jeongmin": "請給我一份單人無刺燉帶魚、一份帶魚釜飯和一份鮑魚粥。"};
 const FOOD_MENU_IMAGES={
- sisters:{src:'images/sisters_soup_menu.png',alt:'자매해장국 姊妹醒酒湯 店家原始菜單'},
- blackpork:{src:'images/nammae_black_pork_menu.png',alt:'남매네흑돼지 南妹家黑豬肉 店家原始菜單'}
+ sisters:{src:'sisters_soup_menu.png',alt:'자매해장국 姊妹醒酒湯 店家原始菜單'},
+ blackpork:{src:'nammae_black_pork_menu.png',alt:'남매네흑돼지 南妹家黑豬肉 店家原始菜單'}
 };
 function foodDetail(id,x){
  const raw=FOOD_ORDER_PLAN[id]||'';
